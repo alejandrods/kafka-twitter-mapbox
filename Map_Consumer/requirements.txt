@@ -1,0 +1,4 @@
+kafka-python
+tweepy
+flask
+textblob
