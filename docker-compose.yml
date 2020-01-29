@@ -1,0 +1,21 @@
+version: "3"
+
+# Services
+services:
+  twitter_stream:
+    build: ./Twitter_Producer
+    env_file:
+      - ./credentials.env
+
+  map_consumer:
+    build: ./Map_Consumer
+    env_file:
+      - ./credentials.env
+    ports:
+      - "9000:9000"
+
+# Network
+networks:
+  default:
+    external:
+      name: kafka-network

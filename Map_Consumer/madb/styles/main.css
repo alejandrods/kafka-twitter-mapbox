@@ -1,0 +1,93 @@
+
+.as-spinner{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
+    background: #ffffff;
+    z-index: 9999;
+    pointer-events: all;
+    transition: opacity 0.5s ease-in;
+    user-select: none;
+}
+.center {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.spinnercontent{
+    width: 232px;
+    height:242px;
+    padding:0;
+}
+
+.as-intro{
+    width: 200px;
+    height:200px;
+    margin-bottom: 9px;
+}
+
+.banner{
+    position: fixed;
+    bottom: -4px;
+    left: 0px;
+    width: 100vw;
+    color: #008080;
+    text-align: center;
+    padding: 10px 20px;
+}
+
+
+.as-cold {
+    color: #008080;
+}
+
+.as-colder {
+    color: #5c7b82;
+}
+
+.as-warm {
+    color: #a66b87;
+}
+
+.as-warmer {
+    color: #c45e89;
+}
+
+.as-hot {
+    color: #ff1d8e;
+}
+
+.as-neutral {
+    color: #666666;
+}
+
+.m-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.m-box div{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+.m-box div img{
+    max-width: 20%
+}
+
+.shrink{
+    flex: 1;
+    max-height: 200px;
+    padding-top: 10px;
+    background-image: url('../../assets/img/madb.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
