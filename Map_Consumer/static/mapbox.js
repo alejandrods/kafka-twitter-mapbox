@@ -1,4 +1,14 @@
 // Define main-map
+
+var lottieAnimation = bodymovin.loadAnimation({
+  container: document.getElementById('boxbar_anim'),
+  path: '../static/Twitter_Anim.json',
+  renderer: 'svg',
+  loop: false,
+})
+
+lottieAnimation.play()
+
 mapboxgl.accessToken = "pk.eyJ1IjoiYWxlamFuZHJvZHMiLCJhIjoiY2s1MDUxb29mMGd6MjNsc2FvOWN3cGc3cCJ9.VYpz5MMK9RUimFuG0TOeOw"
 var main_map = new mapboxgl.Map({
     container: 'map',
@@ -26,15 +36,25 @@ main_map.addControl(new mapboxgl.FullscreenControl());
 // Add Navigation Control
 main_map.addControl(new mapboxgl.NavigationControl());
 
-// Event Listener to get value from flask-app
+//Event Listener to get value from flask-app
 var source = new EventSource('/topic/streaming.twitter.coord');
 source.addEventListener('message', function(e){
-    marker2map = JSON.parse(e.data);
+    obj_twt_coord = JSON.parse(e.data);
     console.log('--------NEW MESSAGE -MB--------')
-    console.log(marker2map);
 
-    display_mk_main_map(marker2map);
-    display_mk_box_map(marker2map);
+    display_mk_main_map(obj_twt_coord);
+    display_mk_box_map(obj_twt_coord);
+}, false);
+
+//Event Listener to get value from flask-app
+var source = new EventSource('/topic/streaming.twitter.general');
+source.addEventListener('message', function(e){
+    obj_twt = JSON.parse(e.data);
+    console.log('--------NEW MESSAGE -MB--------')
+    console.log(obj_twt);
+    lottieAnimation.play();
+
+//    document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
 }, false);
 
 // Function to display marker - boxmap
@@ -65,7 +85,7 @@ function display_mk_box_map(marker) {
 }
 
 // Function to plot progress bar
-function display_progress(content, color){
+function display_progress(content, color, value_txt){
     var progress_bar = new ProgressBar.Circle(content, {
         color: '#bcb',
         // This has to be the same size as the maximum width to
@@ -88,7 +108,7 @@ function display_progress(content, color){
             if (value === 0) {
                 circle.setText('');
             } else {
-                circle.setText(value);
+                circle.setText(String(value_txt));
             }
     }});
     return progress_bar
@@ -134,8 +154,13 @@ function display_mk_main_map(marker) {
 
         }
         // Change with the results from the model
-        var total_goals = 10;
-        var goals_completed = marker.pred;
+        fwrg = marker.following
+        fwrs = marker.followers
+
+        var total_goals_fwrg = 10000;
+        var goals_completed_fwrg= fwrg;
+        var total_goals_fwrs = 10000;
+        var goals_completed_fwrs= fwrs;
 
         popup.on('open', function(e) {
             console.log("POPUP OPEN")
@@ -145,16 +170,16 @@ function display_mk_main_map(marker) {
             console.log(obj_popup)
 
             if (obj_popup.opened==false){
-                bar_up = display_progress(content=pop_graph_up, color='#CFCF25')
-                bar_down = display_progress(content=pop_graph_down, color='#CF9125')
+                bar_up = display_progress(content=pop_graph_up, color='#CFCF25', value_txt=fwrg)
+                bar_down = display_progress(content=pop_graph_down, color='#CF9125', value_txt=fwrs)
 
                 bar_up.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
                 bar_up.text.style.fontSize = '0.5rem';
-                bar_up.animate(goals_completed/total_goals);
+                bar_up.animate(goals_completed_fwrg/total_goals_fwrg);
 
                 bar_down.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
                 bar_down.text.style.fontSize = '0.5rem';
-                bar_down.animate(goals_completed/total_goals);
+                bar_down.animate(goals_completed_fwrs/total_goals_fwrs);
             }
 
             var obj_opened_popup = marker_map.getPopup()
