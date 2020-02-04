@@ -4,10 +4,10 @@ var lottieAnimation = bodymovin.loadAnimation({
   container: document.getElementById('boxbar_anim'),
   path: '../static/Twitter_Anim.json',
   renderer: 'svg',
-  loop: false,
+  loop: true,
+  autoplay: true,
 })
 
-lottieAnimation.play()
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYWxlamFuZHJvZHMiLCJhIjoiY2s1MDUxb29mMGd6MjNsc2FvOWN3cGc3cCJ9.VYpz5MMK9RUimFuG0TOeOw"
 var main_map = new mapboxgl.Map({
@@ -36,25 +36,27 @@ main_map.addControl(new mapboxgl.FullscreenControl());
 // Add Navigation Control
 main_map.addControl(new mapboxgl.NavigationControl());
 
-//Event Listener to get value from flask-app
+//Event Listener to get value from flask-app - coord twts
 var source = new EventSource('/topic/streaming.twitter.coord');
 source.addEventListener('message', function(e){
     obj_twt_coord = JSON.parse(e.data);
-    console.log('--------NEW MESSAGE -MB--------')
+    console.log('--> Obj Coords')
+    console.log(obj_twt_coord)
 
     display_mk_main_map(obj_twt_coord);
     display_mk_box_map(obj_twt_coord);
 }, false);
 
-//Event Listener to get value from flask-app
+//Event Listener to get value from flask-app - general twts
 var source = new EventSource('/topic/streaming.twitter.general');
 source.addEventListener('message', function(e){
     obj_twt = JSON.parse(e.data);
-    console.log('--------NEW MESSAGE -MB--------')
+    console.log('--> Obj General')
     console.log(obj_twt);
-    lottieAnimation.play();
+    console.log('https://twitter.com/' + obj_twt.user)
 
-//    document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
+    document.getElementById("boxbar_txt").href = "https://twitter.com/" + obj_twt.user;
+    document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
 }, false);
 
 // Function to display marker - boxmap
@@ -75,13 +77,12 @@ function display_mk_box_map(marker) {
     // Append market into array
     currentMarkers_mb.push(marker_map_mb);
 
-    // We show 7 markers at the same time. This function deletes markers in order
-    n_markers = 7
+    // We show 12 markers at the same time. This function deletes markers in order
+    n_markers = 12
     if (currentMarkers_mb.length==n_markers){
         currentMarkers_mb[0].remove();
         currentMarkers_mb = currentMarkers_mb.slice(currentMarkers_mb.length-(n_markers-1))
     }
-    console.log('--------END MESSAGE -MB--------')
 }
 
 // Function to plot progress bar
@@ -128,9 +129,6 @@ function display_mk_main_map(marker) {
         el.style.width = '50px';
         el.style.height = '50px';
 
-        console.log("currentMarkers_mb")
-        console.log(currentMarkers_mb);
-
         // Create popup
         var popup = new mapboxgl.Popup({ offset: 25 })
         popup['opened'] = false
@@ -146,7 +144,7 @@ function display_mk_main_map(marker) {
         // Append market into array
         currentMarkers.push(marker_map);
 
-        // We show 7 markers at the same time. This function deletes markers in order
+        // We show 12 markers at the same time. This function deletes markers in order
         n_markers = 12
         if (currentMarkers.length==n_markers){
             currentMarkers[0].remove();
@@ -156,18 +154,22 @@ function display_mk_main_map(marker) {
         // Change with the results from the model
         fwrg = marker.following
         fwrs = marker.followers
+        console.log('following ' + fwrg)
+        console.log('followers ' + fwrs)
 
-        var total_goals_fwrg = 10000;
+        len_fwrg = fwrg.toString().length
+        len_fwrs = fwrs.toString().length
+
+        var total_goals_fwrg = Math.pow(10, len_fwrg);
         var goals_completed_fwrg= fwrg;
-        var total_goals_fwrs = 10000;
+        var total_goals_fwrs = Math.pow(10, len_fwrs);
         var goals_completed_fwrs= fwrs;
 
-        popup.on('open', function(e) {
-            console.log("POPUP OPEN")
+        console.log('1fwg: ' +  total_goals_fwrg/goals_completed_fwrg)
+        console.log('1fws: ' +  total_goals_fwrs/goals_completed_fwrs)
 
-            console.log("1")
+        popup.on('open', function(e) {
             var obj_popup = marker_map.getPopup()
-            console.log(obj_popup)
 
             if (obj_popup.opened==false){
                 bar_up = display_progress(content=pop_graph_up, color='#CFCF25', value_txt=fwrg)
@@ -183,17 +185,12 @@ function display_mk_main_map(marker) {
             }
 
             var obj_opened_popup = marker_map.getPopup()
-            console.log('update value')
-            console.log(obj_opened_popup)
             obj_opened_popup['opened'] = true
         });
-
-        console.log('--------END MESSAGE--------')
 }
 
 // FlyTo click
 box_map.on('click', function(e) {
-    console.log(e.lngLat.wrap())
     main_map.flyTo({
         center: [
             e.lngLat.wrap().lng,
