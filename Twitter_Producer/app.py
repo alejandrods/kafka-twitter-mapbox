@@ -71,7 +71,8 @@ def _build_coord(data):
 class StdOutListener(StreamListener):
     def on_data(self, data):
         message = json.loads(data)
-        producer.send("queueing.twt_general", value={'twt': message['text']})
+        producer.send("queueing.twt_general", value={'twt': message['text'],
+                                                     'user': message['user']['name']})
         try:
             if message['place']:
                 filter_msg = _build_coord(message)
