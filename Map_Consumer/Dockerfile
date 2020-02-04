@@ -7,7 +7,6 @@ EXPOSE 9000
 
 ADD ./requirements.txt ./
 RUN pip install -r requirements.txt
-RUN python -m textblob.download_corpora
 ADD ./ ./
 
 CMD ["python", "-u", "app.py"]
