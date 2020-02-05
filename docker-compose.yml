@@ -21,3 +21,15 @@ networks:
   default:
     external:
       name: kafka-network
+
+# -> When kafka instance in GCL says: "Set config.project" - gcloud config set project coronavirus-twitter-realtime
+# -> How add firewall in google cloud
+# gcloud compute firewall-rules create allow-node-api --description "node api channel" --allow tcp:2181
+# gcloud compute firewall-rules create allow-node-api --description "node api channel" --allow tcp:9092
+
+# -> Create Topic - https://sookocheff.com/post/kafka/deploying-kafka-to-gce/
+# $KAFKA_HOME/bin/kafka-topics.sh
+# $KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+# -> Para desplegar un cluster
+# gcloud container clusters create twitter-realtime --num-nodes 2 --machine-type g1-small --region europe-north1
