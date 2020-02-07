@@ -3,7 +3,7 @@ import os
 import json
 import time
 
-from flask import Flask, render_template, Response, stream_with_context, request
+from flask import Flask, Response
 from kafka import KafkaConsumer
 
 
@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 # Get env variables
 KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
-MAPBOX_TOKEN = os.environ.get('MAPBOX_TOKEN')
 TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
@@ -25,16 +24,6 @@ consumer_coord = KafkaConsumer(TWT_COORD_TOPIC,
                                bootstrap_servers=KAFKA_BROKER_URL,
                                value_deserializer=lambda value: json.loads(value)
                                )
-
-
-@app.route('/')
-def index():
-    """
-    Function to render template
-    :return:
-    """
-    return render_template('index.html',
-                           mapbox_access_token=MAPBOX_TOKEN)
 
 
 @app.route('/topic/streaming.twitter.general')
