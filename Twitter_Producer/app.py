@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-import random
+import subprocess
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
@@ -51,6 +51,7 @@ def _build_coord(data):
     longitude = coord[0][0][0]
     latitude = coord[0][0][1]
     username = data['user']['name']
+    screen_name = data['user']['screen_name']
     followers = data['user']['followers_count']
     following = data['user']['friends_count']
     tweet = data['text']
@@ -59,6 +60,7 @@ def _build_coord(data):
     dict_coord = {'lat': latitude,
                   'long': longitude,
                   'user': username,
+                  'screen_name': screen_name,
                   'followers': followers,
                   'following': following,
                   'twt': tweet,
@@ -71,16 +73,14 @@ def _build_coord(data):
 class StdOutListener(StreamListener):
     def on_data(self, data):
         message = json.loads(data)
-        producer.send("queueing.twt_general", value={'twt': message['text'],
-                                                     'user': message['user']['name']})
-        try:
-            if message['place']:
-                filter_msg = _build_coord(message)
-                print(filter_msg)
-                producer.send("queueing.twt_coord", value=filter_msg)
-            # producer.send("test", value=message)
-        except Exception:
-            pass
+        producer.send("queueing.twt_general",
+                      value={'twt': message['text'],
+                             'user': message['user']['name'],
+                             'screen_name': message['user']['screen_name']})
+        if message['place']:
+            filter_msg = _build_coord(message)
+            print(filter_msg)
+            producer.send("queueing.twt_coord", value=filter_msg)
         return True
 
     def on_error(self, status):
@@ -88,12 +88,13 @@ class StdOutListener(StreamListener):
 
 
 if __name__ == "__main__":
+    subprocess.Popen(['python', 'healthcheck.py'])
+
     # Auth
     auth = OAuthHandler(API_KEY, API_SECRET_KEY)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
     # Stream
     listener = StdOutListener()
-    Stream = Stream(auth, listener)
-    # Get message with this word
-    Stream.filter(track=['coronavirus'])
+    myStream = Stream(auth, listener)
+    myStream.filter(track=['coronavirus'])

@@ -1,3 +1,4 @@
 kafka-python
 tweepy
 flask
+gunicorn

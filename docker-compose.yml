@@ -7,10 +7,20 @@ services:
     build: ./Twitter_Producer
     env_file:
       - ./credentials.env
+    ports:
+      - "8000:8000"
 
   # Map Consumer
-  map_consumer:
-    build: ./Map_Consumer
+  twitter_consumer:
+    build: ./Twitter_Consumer
+    env_file:
+      - ./credentials.env
+    ports:
+      - "8080:8080"
+
+  # Front-End
+  front_end:
+    build: ./Front_End
     env_file:
       - ./credentials.env
     ports:
@@ -33,3 +43,9 @@ networks:
 
 # -> Para desplegar un cluster
 # gcloud container clusters create twitter-realtime --num-nodes 2 --machine-type g1-small --region europe-north1
+
+# -> Para tagear una imagen de docker
+# docker tag twitterkafka_twitter_stream:latest eu.gcr.io/coronavirus-twitter-realtime/twitterkafka_twitter_stream:latest
+
+# -> Para push imagen de docker a GoogleCloud
+# docker push eu.gcr.io/coronavirus-twitter-realtime/twitterkafka_twitter_stream:latest
