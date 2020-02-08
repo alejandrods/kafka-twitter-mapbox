@@ -1,7 +1,33 @@
 // Main Script
 
+// Get execution
+var path = window.location.pathname;
+var page = path.split("/").pop();
+
+// Restriction for mobile screen
 if (screen.width < 1280 || screen.height < 740) {
     document.location = "mobile.html";
+}
+
+// Load Loading Animation
+var lottieAnimation = bodymovin.loadAnimation({
+  container: document.getElementById('anim'),
+  path: '../static/resources/Twitter_Anim.json',
+  renderer: 'svg',
+  loop: true,
+  autoplay: true,
+})
+
+// TimeOut to loading page
+setTimeout(function() {
+    $('#loading').fadeOut('fast');
+    $('.footer').fadeOut('fast');
+}, 4000); // <-- time in milliseconds
+
+// Redirect Function
+function redirectIt(obj){
+    var goToLink = obj.getAttribute("href");
+    window.location.href=goToLink;
 }
 
 // Load animation
@@ -52,28 +78,28 @@ box_map.on('click', function(e) {
 main_map.addControl(new mapboxgl.FullscreenControl());
 main_map.addControl(new mapboxgl.NavigationControl());
 
-// Event Listener to get value from flask-app - coord twts
-var source = new EventSource('https://twitter-kafka-consumer-437m3hlpxa-lz.a.run.app/topic/streaming.twitter.coord');
-source.addEventListener('message', function(e){
-    obj_twt_coord = JSON.parse(e.data);
-    console.log('\n--> Obj Coords')
-    console.log(obj_twt_coord)
-
-    display_mk_main_map(obj_twt_coord);
-    display_mk_box_map(obj_twt_coord);
-}, false);
-
-// Event Listener to get value from flask-app - general twts
-var source = new EventSource('https://twitter-kafka-consumer-437m3hlpxa-lz.a.run.app/topic/streaming.twitter.general');
-source.addEventListener('message', function(e){
-    obj_twt = JSON.parse(e.data);
-    console.log('--> Obj General')
-    console.log(obj_twt);
-    console.log('https://twitter.com/' + obj_twt.screen_name)
-
-    document.getElementById("boxbar_txt").href = "https://twitter.com/" + obj_twt.screen_name;
-    document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
-}, false);
+//// Event Listener to get value from flask-app - coord twts
+//var source = new EventSource('https://twitter-kafka-consumer-437m3hlpxa-lz.a.run.app/topic/streaming.twitter.coord');
+//source.addEventListener('message', function(e){
+//    obj_twt_coord = JSON.parse(e.data);
+//    console.log('\n--> Obj Coords')
+//    console.log(obj_twt_coord)
+//
+//    display_mk_main_map(obj_twt_coord);
+//    display_mk_box_map(obj_twt_coord);
+//}, false);
+//
+//// Event Listener to get value from flask-app - general twts
+//var source = new EventSource('https://twitter-kafka-consumer-437m3hlpxa-lz.a.run.app/topic/streaming.twitter.general');
+//source.addEventListener('message', function(e){
+//    obj_twt = JSON.parse(e.data);
+//    console.log('--> Obj General')
+//    console.log(obj_twt);
+//    console.log('https://twitter.com/' + obj_twt.screen_name)
+//
+//    document.getElementById("boxbar_txt").href = "https://twitter.com/" + obj_twt.screen_name;
+//    document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
+//}, false);
 
 // Parameters
 var n_markers = 50

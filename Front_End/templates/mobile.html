@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Coronovarius Real-Time </title>
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.3/lottie.js"></script>
+	<script src="../static/progressbar.js"></script>
+	<style>
+		body {
+			background: #222
+		}
+		.container {
+            position: absolute;
+            width: 100%;
+            height: 95%;
+            left: 0;
+            top: 5%;
+            background: #242f3f;
+            z-index: 1;
+		}
+		#loading {
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			position: fixed;
+			display: block;
+			background-color: #242f3f;
+			z-index: 98;
+			text-align: center;
+		}
+		#anim {
+			width: 400px;
+			height: 400px;
+			margin: 0 auto;
+		}
+		#text {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 20px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: 100;
+            line-height: 13px;
+            color: white;
+		}
+		.footer{
+			position: fixed;
+			bottom: -4px;
+			left: 0px;
+			width: 100vw;
+			color: #008080;
+			text-align: center;
+			padding: 10px 20px;
+			z-index: 99;
+		}
+		span {
+			 cursor:pointer;
+			 color:white;
+		}
+	</style>
+    <link rel="shortcut icon" href="../static/resources/favicon.ico">
+</head>
+	<body>
+		<div class="loading" id="loading">
+			<div class="anim" id="anim"></div>
+			<div class="text" id="text">Sorry to tell you that in order to enjoy the correct experience you have to open it on a computer</div>
+		</div>
+		<footer class='footer'>
+			<div class='as-body as-color--type-02'>Made with <span class='as-hot as-subheader'>&#x2665;
+			</span> by <span class=" as-yo" onclick="redirectIt(this)" href="https://github.com/alejandrods">Alejandro Diaz Santos</span></div>
+		</footer>
+		<script src="../static/main_mobile.js"></script>
+	</body>
+</html>
