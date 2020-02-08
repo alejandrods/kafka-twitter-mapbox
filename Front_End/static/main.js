@@ -22,7 +22,7 @@ var lottieAnimation = bodymovin.loadAnimation({
 setTimeout(function() {
     $('#loading').fadeOut('fast');
     $('.footer').fadeOut('fast');
-}, 4000); // <-- time in milliseconds
+}, 4000);
 
 // Redirect Function
 function redirectIt(obj){
@@ -51,6 +51,15 @@ var main_map = new mapboxgl.Map({
     minZoom: 2,
     pitch:45
 });
+
+// Add search-bar
+var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    marker: false
+});
+
+document.getElementById('geocoder').appendChild(geocoder.onAdd(main_map));
 
 // Box Map Init
 var box_map = new mapboxgl.Map({
