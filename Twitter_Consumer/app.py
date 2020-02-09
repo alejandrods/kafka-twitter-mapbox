@@ -4,10 +4,13 @@ import json
 import time
 
 from flask import Flask, Response
+from flask_cors import CORS
 from kafka import KafkaConsumer
 
 
 app = Flask(__name__)
+CORS(app)
+
 
 # Get env variables
 KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
