@@ -41,6 +41,8 @@ var lottieAnimation = bodymovin.loadAnimation({
 
 // Main Map Init
 mapboxgl.accessToken = "pk.eyJ1IjoiYWxlamFuZHJvZHMiLCJhIjoiY2s1MDUxb29mMGd6MjNsc2FvOWN3cGc3cCJ9.VYpz5MMK9RUimFuG0TOeOw"
+var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
+
 var main_map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v10',
@@ -52,14 +54,159 @@ var main_map = new mapboxgl.Map({
     pitch:45
 });
 
+
+/////////
+var coordinatesGeocoder = function(query) {
+    // match anything which looks like a decimal degrees coordinate pair
+    var matches = query.match(
+        /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
+        );
+    if (!matches) {
+        return null;
+    }
+    function coordinateFeature(lng, lat) {
+        return {
+            center: [lng, lat],
+            geometry: {
+                type: 'Point',
+                coordinates: [lng, lat]
+            },
+            place_name: 'Lat: ' + lat + ' Lng: ' + lng,
+            place_type: ['coordinate'],
+            properties: {},
+            type: 'Feature'
+        };
+    }
+
+    var coord1 = Number(matches[1]);
+    var coord2 = Number(matches[2]);
+    var geocodes = [];
+
+    if (coord1 < -90 || coord1 > 90) {
+        // must be lng, lat
+        geocodes.push(coordinateFeature(coord1, coord2));
+    }
+
+    if (coord2 < -90 || coord2 > 90) {
+        // must be lat, lng
+        geocodes.push(coordinateFeature(coord2, coord1));
+    }
+
+    if (geocodes.length === 0) {
+        // else could be either lng, lat or lat, lng
+        geocodes.push(coordinateFeature(coord1, coord2));
+        geocodes.push(coordinateFeature(coord2, coord1));
+    }
+
+    return geocodes;
+};
+
 // Add search-bar
 var geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
+    localGeocoder: coordinatesGeocoder,
     mapboxgl: mapboxgl,
     marker: false
 });
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(main_map));
+
+// Function to add and update graph-bar
+var options = {
+      series: [{
+        data: []
+      }],
+      chart: {
+        id: 'chart1',
+        type: 'bar',
+        height: 260,
+        width: 280
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        position: 'bottom'
+      },
+      colors: [
+        "#F3B415",
+        ],
+       labels: {
+        show: false
+        },
+      xaxis: {
+        categories: [],
+        tickPlacement: "on"
+      },
+    };
+
+// Function to get place in based on coordinates and update bar_graph
+i = 0;
+function coord2place(lng_coord, lat_coord) {
+    mapboxClient.geocoding
+    .reverseGeocode({
+        query: [lng_coord, lat_coord],
+    })
+    .send()
+    .then(function(response) {
+        if (
+            response &&
+            response.body &&
+            response.body.features &&
+            response.body.features.length
+        ) {
+            features = response.body.features
+            for (i = 0; i < features.length; i++) {
+                if (features[i].id.includes('country')) {
+                    country = features[i].text
+                    break
+                }
+            }
+
+            categ_options = options.xaxis.categories
+
+            // Check if categories < 8
+            if (categ_options.length < 8) {
+                // Check if country in categories
+                if (categ_options.indexOf(country) > -1){
+                    // Get index of country
+                    idx_country = categ_options.indexOf(country)
+                    // Update value
+                    options.series[0].data[idx_country]++
+                } else {
+                    // Append value and country
+                    options.series[0].data.push(1)
+                    options.xaxis.categories.push(country)
+                }
+            }
+            console.log("UPDATED OPTIONS FOR BAR")
+            console.log(options)
+            console.log(" ")
+        }
+    });
+}
+
+var chart = new ApexCharts(document.querySelector("#viewshed_graph"), options);
+chart.render();
+
+function changeData(options) {
+    console.log("UPDATE CHART")
+    console.log(options.xaxis.categories)
+    console.log(options.series[0].data)
+    ApexCharts.exec('chart1', "updateOptions", {
+        xaxis: {
+          categories: options.xaxis.categories
+        }
+      });
+
+    ApexCharts.exec('chart1', "updateSeries", [
+        {
+        data: options.series[0].data
+        }
+    ]);
+}
 
 // Box Map Init
 var box_map = new mapboxgl.Map({
@@ -143,6 +290,15 @@ function display_mk_main_map(marker) {
         .addTo(main_map);
 
     marker_map["OPENED"] = false
+////7
+    console.log("CALL PLACE2COORD")
+    coord2place(lng_coord=marker.long, lat_coord=marker.lat)
+    console.log("fine")
+    changeData(options)
+
+    console.log("RESPONSE PLACE2COORD")
+////
+
     // Append market into array
     currentMarkers_main.push(marker_map);
 
