@@ -2,14 +2,21 @@
 import os
 import json
 import time
+import logging
 
 from flask import Flask, Response
 from flask_cors import CORS
 from kafka import KafkaConsumer
 
 
+logging.basicConfig(level=logging.INFO,
+                    format='CONS - %(asctime)s :: %(levelname)s :: %(message)s')
+
+
+logging.info("Init Flask-App...")
 app = Flask(__name__)
 CORS(app)
+logging.info("Flask-App Initialized")
 
 
 # Get env variables
@@ -18,6 +25,7 @@ TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
 # Create consumers
+logging.info("Create consumers...")
 consumer_general = KafkaConsumer(TWT_GENERAL_TOPIC,
                                  bootstrap_servers=KAFKA_BROKER_URL,
                                  value_deserializer=lambda value: json.loads(value)
@@ -27,6 +35,7 @@ consumer_coord = KafkaConsumer(TWT_COORD_TOPIC,
                                bootstrap_servers=KAFKA_BROKER_URL,
                                value_deserializer=lambda value: json.loads(value)
                                )
+logging.info("Consumers created")
 
 
 @app.route('/topic/streaming.twitter.general')
@@ -40,12 +49,12 @@ def twt_general():
         try:
             for message in consumer_general:
                 # Get value from message
-                dict_coord = message.value
-                print(dict_coord)
+                dict_general = message.value
+                logging.info(f"Reading Consumer General: {dict_general}")
                 time.sleep(10)
-                yield 'data:{0}\n\n'.format(json.dumps(dict_coord))
+                yield 'data:{0}\n\n'.format(json.dumps(dict_general))
         except ValueError as e:
-            print(f'Error: {e}')
+            logging.error(f"Error: {e}")
 
     response = events()
     return Response(response,
@@ -64,11 +73,11 @@ def twt_coord():
             for message in consumer_coord:
                 # Get value from message
                 dict_coord = message.value
-                print(dict_coord)
+                logging.info(f"Reading Consumer Coordinates: {dict_coord}")
                 time.sleep(1)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_coord))
         except ValueError as e:
-            print(f'Error: {e}')
+            logging.error(f"Error: {e}")
 
     response = events()
     return Response(response,
@@ -76,7 +85,7 @@ def twt_coord():
 
 
 if __name__ == '__main__':
+    logging.info("Launch App")
     app.run(host='0.0.0.0',
             debug=True,
             port=8080)
-            # port=int(os.environ.get('PORT', 8080)))
