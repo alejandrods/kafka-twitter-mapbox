@@ -2,9 +2,11 @@
 import os
 
 from flask import Flask, render_template
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 
 # Get env variables
 MAPBOX_TOKEN = os.environ.get('MAPBOX_TOKEN')
