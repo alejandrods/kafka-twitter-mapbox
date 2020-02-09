@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
+import logging
 import subprocess
 
 from tweepy.streaming import StreamListener
@@ -9,6 +10,8 @@ from tweepy import Stream
 
 from kafka import KafkaProducer
 
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s :: %(levelname)s :: %(message)s')
 
 """
 The streaming api is quite different from the REST api because the REST api 
@@ -33,11 +36,13 @@ TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
 # Producer
+logging.info("Init Producer...")
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BROKER_URL,
     # Encode all values as JSON
     value_serializer=lambda value: json.dumps(value).encode(),
 )
+logging.info("Producer initialized")
 
 
 # Extract information
@@ -72,29 +77,37 @@ def _build_coord(data):
 # Create StreamClass
 class StdOutListener(StreamListener):
     def on_data(self, data):
+        logging.info("Listening")
         message = json.loads(data)
+        logging.info(f"Message: {message}")
+
         producer.send("queueing.twt_general",
                       value={'twt': message['text'],
                              'user': message['user']['name'],
                              'screen_name': message['user']['screen_name']})
         if message['place']:
             filter_msg = _build_coord(message)
-            print(filter_msg)
+            logging.info(f"Tweets with coord: {filter_msg}")
             producer.send("queueing.twt_coord", value=filter_msg)
         return True
 
     def on_error(self, status):
-        print('Error: ', status)
+        logging.error(f"Error: {status}")
 
 
 if __name__ == "__main__":
+    logging.info("Open subprocess...")
     subprocess.Popen(['python', 'healthcheck.py'])
+    logging.info("Subprocess opened")
 
     # Auth
+    logging.info("Connecting to tweepy...")
     auth = OAuthHandler(API_KEY, API_SECRET_KEY)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+    logging.info("Connected")
 
     # Stream
+    logging.info("Preparing to listen...")
     listener = StdOutListener()
     myStream = Stream(auth, listener)
     myStream.filter(track=['coronavirus'])
