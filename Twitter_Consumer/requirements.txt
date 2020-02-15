@@ -1,0 +1,5 @@
+kafka-python
+tweepy
+flask
+flask-cors==3.0.7
+gunicorn
