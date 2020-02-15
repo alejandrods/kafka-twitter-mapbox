@@ -274,7 +274,7 @@ main_map.addControl(new mapboxgl.FullscreenControl());
 main_map.addControl(new mapboxgl.NavigationControl());
 
 // Event Listener to get value from flask-app - coord twts
-var source = new EventSource('http://localhost:8000/topic/streaming.twitter.coord');
+var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.coord');
 source.addEventListener('message', function(e){
     obj_twt_coord = JSON.parse(e.data);
     console.log('1--> Obj Coords')
@@ -285,7 +285,7 @@ source.addEventListener('message', function(e){
 }, false);
 
 // Event Listener to get value from flask-app - general twts
-var source = new EventSource('http://localhost:8000/topic/streaming.twitter.general');
+var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.general');
 source.addEventListener('message', function(e){
     obj_twt = JSON.parse(e.data);
 
