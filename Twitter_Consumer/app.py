@@ -23,6 +23,7 @@ logging.info("Flask-App Initialized")
 KAFKA_BROKER_URL = "35.228.145.124:9092"
 TWT_GENERAL_TOPIC = "queueing.twt_general"
 TWT_COORD_TOPIC = "queueing.twt_coord"
+PORT = 8000
 
 # KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
 # TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
@@ -97,4 +98,4 @@ def twt_coord():
 if __name__ == '__main__':
     logging.info("Launch App")
     app.run(host='0.0.0.0',
-            port=8080)
+            port=PORT)
