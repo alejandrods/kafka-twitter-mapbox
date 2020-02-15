@@ -61,7 +61,7 @@ def twt_general():
                 # Get value from message
                 dict_general = message.value
                 logging.info(f"Reading Consumer General: {dict_general}")
-                time.sleep(10)
+                time.sleep(3)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_general))
         except ValueError as e:
             logging.error(f"Error: {e}")
@@ -84,7 +84,7 @@ def twt_coord():
                 # Get value from message
                 dict_coord = message.value
                 logging.info(f"Reading Consumer Coordinates: {dict_coord}")
-                time.sleep(1)
+                time.sleep(0.5)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_coord))
         except ValueError as e:
             logging.error(f"Error: {e}")
