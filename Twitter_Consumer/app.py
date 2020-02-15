@@ -4,7 +4,7 @@ import json
 import time
 import logging
 
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
 from flask_cors import CORS
 from kafka import KafkaConsumer
 
@@ -36,6 +36,12 @@ consumer_coord = KafkaConsumer(TWT_COORD_TOPIC,
                                value_deserializer=lambda value: json.loads(value)
                                )
 logging.info("Consumers created")
+
+
+@app.route('/')
+def health():
+    result = {'Status': 'OK'}
+    return jsonify(result), 200
 
 
 @app.route('/topic/streaming.twitter.general')
