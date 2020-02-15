@@ -84,7 +84,7 @@ def twt_coord():
                 # Get value from message
                 dict_coord = message.value
                 logging.info(f"Reading Consumer Coordinates: {dict_coord}")
-                time.sleep(0.5)
+                # time.sleep(0.5)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_coord))
         except ValueError as e:
             logging.error(f"Error: {e}")
