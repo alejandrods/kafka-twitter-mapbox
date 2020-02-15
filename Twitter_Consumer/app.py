@@ -9,7 +9,7 @@ from flask import Flask, Response, jsonify
 from flask_cors import CORS
 from kafka import KafkaConsumer
 
-load_dotenv(dotenv_path="../credentials.env")
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO,
                     format='CONS - %(asctime)s :: %(levelname)s :: %(message)s')
@@ -25,6 +25,7 @@ logging.info("Flask-App Initialized")
 KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
 TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
+PORT = os.environ.get('PORT_CONSUMER')
 
 
 # Create consumers
