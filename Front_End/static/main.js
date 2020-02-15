@@ -54,8 +54,7 @@ var main_map = new mapboxgl.Map({
     pitch:45
 });
 
-
-/////////
+// Get coordinate query
 var coordinatesGeocoder = function(query) {
     // match anything which looks like a decimal degrees coordinate pair
     var matches = query.match(
@@ -133,18 +132,49 @@ var options = {
       colors: [
         "#F3B415",
         ],
-       labels: {
+
+      axisBorder: {
         show: false
-        },
+      },
       xaxis: {
         categories: [],
-        tickPlacement: "on"
+        tickPlacement: "on",
+        labels: {
+            show: false
+        }
+      },
+      yaxis: {
+        show: false
       },
     };
 
+
+var chart = new ApexCharts(document.querySelector("#viewshed_graph"), options);
+chart.render();
+
+function changeData(options) {
+    console.log("2.4 --> Update Data")
+    console.log(options.xaxis.categories)
+    console.log(options.series[0].data)
+
+    ApexCharts.exec('chart1', "updateOptions", {
+        xaxis: {
+          categories: options.xaxis.categories
+        }
+      });
+
+    ApexCharts.exec('chart1', "updateSeries", [
+        {
+        data: options.series[0].data
+        }
+    ]);
+}
+
 // Function to get place in based on coordinates and update bar_graph
+country2idx = {}
+
 i = 0;
-function coord2place(lng_coord, lat_coord) {
+function coord2place(lng_coord, lat_coord, callback) {
     mapboxClient.geocoding
     .reverseGeocode({
         query: [lng_coord, lat_coord],
@@ -158,6 +188,9 @@ function coord2place(lng_coord, lat_coord) {
             response.body.features.length
         ) {
             features = response.body.features
+            console.log("2.1 --> Features")
+            console.log(features)
+
             for (i = 0; i < features.length; i++) {
                 if (features[i].id.includes('country')) {
                     country = features[i].text
@@ -165,48 +198,54 @@ function coord2place(lng_coord, lat_coord) {
                 }
             }
 
+            console.log("2.2 --> Country" + country)
             categ_options = options.xaxis.categories
+            console.log("2.3 --> categ_options" + categ_options)
 
-            // Check if categories < 8
-            if (categ_options.length < 8) {
-                // Check if country in categories
-                if (categ_options.indexOf(country) > -1){
-                    // Get index of country
-                    idx_country = categ_options.indexOf(country)
-                    // Update value
-                    options.series[0].data[idx_country]++
-                } else {
-                    // Append value and country
-                    options.series[0].data.push(1)
-                    options.xaxis.categories.push(country)
-                }
+            // Check if country in dict
+            if (country2idx.hasOwnProperty(country)){
+                // if exists sum one
+                country2idx[country]++
+            } else {
+                country2idx[country] = 1
             }
-            console.log("UPDATED OPTIONS FOR BAR")
-            console.log(options)
-            console.log(" ")
+
+            // Create items array
+            var items = Object.keys(country2idx).map(function(key) {
+                return [key, country2idx[key]];
+            });
+
+            // Sort the array based on the second element
+            items.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+
+            // Cut slice
+            categories = []
+            values = []
+            slice_items = items.slice(0, 12)
+            console.log("ITEMS")
+            console.log(slice_items)
+            for (i=0; i < slice_items.length; i++) {
+                categories.push(slice_items[i][0])
+                values.push(slice_items[i][1])
+            }
+
+            console.log('--------')
+            console.log(categories)
+            console.log(values)
+            console.log('--------')
+
+            options.series[0].data = values
+            options.xaxis.categories = categories
+
+            changeData(options)
+
         }
     });
+    callback()
 }
 
-var chart = new ApexCharts(document.querySelector("#viewshed_graph"), options);
-chart.render();
-
-function changeData(options) {
-    console.log("UPDATE CHART")
-    console.log(options.xaxis.categories)
-    console.log(options.series[0].data)
-    ApexCharts.exec('chart1', "updateOptions", {
-        xaxis: {
-          categories: options.xaxis.categories
-        }
-      });
-
-    ApexCharts.exec('chart1', "updateSeries", [
-        {
-        data: options.series[0].data
-        }
-    ]);
-}
 
 // Box Map Init
 var box_map = new mapboxgl.Map({
@@ -235,10 +274,10 @@ main_map.addControl(new mapboxgl.FullscreenControl());
 main_map.addControl(new mapboxgl.NavigationControl());
 
 // Event Listener to get value from flask-app - coord twts
-var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.coord');
+var source = new EventSource('http://localhost:8000/topic/streaming.twitter.coord');
 source.addEventListener('message', function(e){
     obj_twt_coord = JSON.parse(e.data);
-    console.log('\n--> Obj Coords')
+    console.log('1--> Obj Coords')
     console.log(obj_twt_coord)
 
     display_mk_main_map(obj_twt_coord);
@@ -246,12 +285,9 @@ source.addEventListener('message', function(e){
 }, false);
 
 // Event Listener to get value from flask-app - general twts
-var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.general');
+var source = new EventSource('http://localhost:8000/topic/streaming.twitter.general');
 source.addEventListener('message', function(e){
     obj_twt = JSON.parse(e.data);
-    console.log('--> Obj General')
-    console.log(obj_twt);
-    console.log('https://twitter.com/' + obj_twt.screen_name)
 
     document.getElementById("boxbar_txt").href = "https://twitter.com/" + obj_twt.screen_name;
     document.getElementById("boxbar_txt").innerHTML = obj_twt.twt;
@@ -288,13 +324,17 @@ function display_mk_main_map(marker) {
         .addTo(main_map);
 
     marker_map["OPENED"] = false
-////7
-    console.log("CALL PLACE2COORD")
-    coord2place(lng_coord=marker.long, lat_coord=marker.lat)
-    console.log("fine")
-    changeData(options)
 
-    console.log("RESPONSE PLACE2COORD")
+////
+    console.log("2--> place2coord start")
+
+    coord2place(lng_coord=marker.long, lat_coord=marker.lat, function() {
+        console.log('Update Graph');
+    });
+    console.log("3--> place2coord end")
+    console.log("4--> Check options")
+    console.log(options)
+
 ////
 
     // Append market into array
@@ -309,8 +349,8 @@ function display_mk_main_map(marker) {
     // Change with the results from the model
     fwrg = marker.following
     fwrs = marker.followers
-    console.log('following ' + fwrg)
-    console.log('followers ' + fwrs)
+//    console.log('following ' + fwrg)
+//    console.log('followers ' + fwrs)
 
     len_fwrg = fwrg.toString().length
     len_fwrs = fwrs.toString().length
@@ -320,8 +360,8 @@ function display_mk_main_map(marker) {
     var total_goals_fwrs = Math.pow(10, len_fwrs);
     var goals_completed_fwrs= fwrs;
 
-    console.log('1fwg: ' +  total_goals_fwrg/goals_completed_fwrg)
-    console.log('1fws: ' +  total_goals_fwrs/goals_completed_fwrs)
+//    console.log('1fwg: ' +  total_goals_fwrg/goals_completed_fwrg)
+//    console.log('1fws: ' +  total_goals_fwrs/goals_completed_fwrs)
 
     popup.on('open', function(e) {
         var obj_popup = marker_map.getPopup()
