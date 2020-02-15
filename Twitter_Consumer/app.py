@@ -20,9 +20,13 @@ logging.info("Flask-App Initialized")
 
 
 # Get env variables
-KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
-TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
-TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
+KAFKA_BROKER_URL = "35.228.145.124:9092"
+TWT_GENERAL_TOPIC = "queueing.twt_general"
+TWT_COORD_TOPIC = "queueing.twt_coord"
+
+# KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
+# TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
+# TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
 # Create consumers
 logging.info("Create consumers...")
@@ -93,5 +97,4 @@ def twt_coord():
 if __name__ == '__main__':
     logging.info("Launch App")
     app.run(host='0.0.0.0',
-            debug=True,
             port=8080)
