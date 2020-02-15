@@ -17,7 +17,9 @@ logging.basicConfig(level=logging.INFO,
 
 logging.info("Init Flask-App...")
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/topic/*": {
+        "origins": "https://coronavirus.twitter-realtime.com"}})
 logging.info("Flask-App Initialized")
 
 
