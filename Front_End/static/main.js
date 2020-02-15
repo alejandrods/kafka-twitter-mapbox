@@ -168,6 +168,12 @@ function changeData(options) {
         data: options.series[0].data
         }
     ]);
+
+    ApexCharts.exec('chart1', "updateOptions", {
+        yaxis: {
+          show: true
+        }
+      });
 }
 
 // Function to get place in based on coordinates and update bar_graph
