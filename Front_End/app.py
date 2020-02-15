@@ -5,9 +5,7 @@ from flask import Flask, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={
-    r"/topic/*": {
-        "origins": "https://coronavirus.twitter-realtime.com"}})
+CORS(app)
 
 
 # Get env variables
