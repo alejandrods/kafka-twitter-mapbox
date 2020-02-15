@@ -2,7 +2,8 @@
 import os
 
 from flask import Flask, render_template
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,7 @@ data_js = {'mapbox_access_token': MAPBOX_TOKEN,
 
 
 @app.route('/')
+@cross_origin()
 def index():
     """
     Function to render template
