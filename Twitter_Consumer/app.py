@@ -3,11 +3,13 @@ import os
 import json
 import time
 import logging
+from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
 from kafka import KafkaConsumer
 
+load_dotenv(dotenv_path="../credentials.env")
 
 logging.basicConfig(level=logging.INFO,
                     format='CONS - %(asctime)s :: %(levelname)s :: %(message)s')
@@ -20,14 +22,10 @@ logging.info("Flask-App Initialized")
 
 
 # Get env variables
-KAFKA_BROKER_URL = "35.228.145.124:9092"
-TWT_GENERAL_TOPIC = "queueing.twt_general"
-TWT_COORD_TOPIC = "queueing.twt_coord"
-PORT = 8000
+KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
+TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
+TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
-# KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
-# TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
-# TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
 # Create consumers
 logging.info("Create consumers...")
