@@ -145,7 +145,7 @@
             font-style: normal;
             font-variant: normal;
             font-weight: 100;
-            line-height: 12px;
+            line-height: 13px;
         }
 		#loading {
 			width: 100%;
@@ -219,6 +219,13 @@
 			 cursor:pointer;
 			 color:white;
 		}
+		#paypal{
+			position: absolute;
+			margin-left: 60px;
+			width: 38px;
+			height: 38px;
+			top: 9px;
+		}
 		@media only screen and (max-width: 760px) {
             #viewshed {
                 display: none;
@@ -269,6 +276,16 @@
 		</a>
 		<div id="geocoder" class="geocoder"></div>
 		<div id="blur_box"></div>
+		<div id="paypal" class="paypal">
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+			<input type="hidden" name="cmd" value="_donations" />
+			<input type="hidden" name="business" value="L8GDNGRXA9TXS" />
+			<input type="hidden" name="currency_code" value="EUR" />
+			<input type="image" src="https://image.flaticon.com/icons/svg/838/838618.svg" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+			<img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1" />
+			</form>
+		</div>
 		<script src="../static/main.js"></script>
 	</body>
 </html>
+
