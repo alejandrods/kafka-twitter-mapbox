@@ -6,7 +6,7 @@ import logging
 from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from kafka import KafkaConsumer
 
 load_dotenv()
@@ -44,14 +44,12 @@ logging.info("Consumers created")
 
 
 @app.route('/')
-@cross_origin()
 def health():
     result = {'Status': 'OK'}
     return jsonify(result), 200
 
 
 @app.route('/topic/streaming.twitter.general')
-@cross_origin()
 def twt_general():
     """
     Function to get messages from consumer and send to index.html
@@ -75,7 +73,6 @@ def twt_general():
 
 
 @app.route('/topic/streaming.twitter.coord')
-@cross_origin()
 def twt_coord():
     """
     Function to get messages from consumer and send to index.html
