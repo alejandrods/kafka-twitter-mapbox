@@ -6,6 +6,7 @@ import logging
 from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify
+from flask_cors import CORS, cross_origin
 from kafka import KafkaConsumer
 
 load_dotenv()
@@ -16,6 +17,8 @@ logging.basicConfig(level=logging.INFO,
 
 logging.info("Init Flask-App...")
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, resources={r"/foo": {"origins": "https://coronavirus.twitter-realtime.com"}})
 
 logging.info("Flask-App Initialized")
 
@@ -42,13 +45,15 @@ logging.info("Consumers created")
 
 
 @app.route('/')
+@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
 def health():
     result = {'Status': 'OK',
-              'Version': '0.0.2'}
+              'Version': '0.0.3'}
     return jsonify(result), 200
 
 
 @app.route('/topic/streaming.twitter.general')
+@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
 def twt_general():
     """
     Function to get messages from consumer and send to index.html
@@ -72,6 +77,7 @@ def twt_general():
 
 
 @app.route('/topic/streaming.twitter.coord')
+@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
 def twt_coord():
     """
     Function to get messages from consumer and send to index.html
