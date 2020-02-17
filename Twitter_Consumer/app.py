@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO,
 logging.info("Init Flask-App...")
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r"/foo": {"origins": "https://coronavirus.twitter-realtime.com"}})
+cors = CORS(app, resources={r"/topic/*": {"origins": "https://coronavirus.twitter-realtime.com"}})
 
 logging.info("Flask-App Initialized")
 
@@ -45,7 +45,7 @@ logging.info("Consumers created")
 
 
 @app.route('/')
-@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
+@cross_origin()
 def health():
     result = {'Status': 'OK',
               'Version': '0.0.3'}
@@ -53,7 +53,7 @@ def health():
 
 
 @app.route('/topic/streaming.twitter.general')
-@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
+@cross_origin()
 def twt_general():
     """
     Function to get messages from consumer and send to index.html
@@ -77,7 +77,7 @@ def twt_general():
 
 
 @app.route('/topic/streaming.twitter.coord')
-@cross_origin(origin='https://coronavirus.twitter-realtime.com', headers=['Content- Type'])
+@cross_origin()
 def twt_coord():
     """
     Function to get messages from consumer and send to index.html
