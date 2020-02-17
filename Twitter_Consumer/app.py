@@ -6,7 +6,6 @@ import logging
 from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify
-from flask_cors import CORS
 from kafka import KafkaConsumer
 
 load_dotenv()
@@ -17,7 +16,6 @@ logging.basicConfig(level=logging.INFO,
 
 logging.info("Init Flask-App...")
 app = Flask(__name__)
-CORS(app)
 
 logging.info("Flask-App Initialized")
 
