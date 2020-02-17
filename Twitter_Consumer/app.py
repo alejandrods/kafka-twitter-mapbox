@@ -43,7 +43,8 @@ logging.info("Consumers created")
 
 @app.route('/')
 def health():
-    result = {'Status': 'OK'}
+    result = {'Status': 'OK',
+              'Version': '0.0.2'}
     return jsonify(result), 200
 
 
