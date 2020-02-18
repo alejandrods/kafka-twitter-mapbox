@@ -1,3 +1,38 @@
+var config = getConfig();
+
+function getConfig() {
+  // if you pass ?dev=true to your url address default config that will be used is `config-development`
+  // otherwise - `config-production`
+  var configName = getParameterByName('dev', false) ? 'env' : 'env';
+
+  window._config || (window._config = {});
+
+  // for production version you should concat your config with main script or put it above main script
+  // inside global `_config` variable for example
+  if (window._config[configName]) return window._config[configName];
+
+  // for development version you can just make an ajax call to get the config
+  $.ajax({
+    url : 'static/resources/conf/' + configName + '.json',
+    async : false,
+    success : function(response) {
+      window._config[configName] = response;
+    }
+  });
+  return window._config[configName];
+}
+
+function getParameterByName(name, defaults, location) {
+  location = location || window.location.href;
+  name = name.replace(/[\[]/,'\\\[').replace(/[\]]/,'\\\]');
+  var result = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(location);
+  return result === null ? defaults : decodeURIComponent(result[1].replace(/\+/g, ' '));
+}
+
+console.log(config.GENERAL_URL)
+console.log(config.COORD_URL)
+console.log(config.N_MARKERS)
+
 if (screen.width < 1280 || screen.height < 740) {
     document.location = "mobile.html";
 }
@@ -27,7 +62,7 @@ var lottieAnimation = bodymovin.loadAnimation({
 })
 
 // Main Map Init
-mapboxgl.accessToken = "pk.eyJ1IjoiYWxlamFuZHJvZHMiLCJhIjoiY2s1MDUxb29mMGd6MjNsc2FvOWN3cGc3cCJ9.VYpz5MMK9RUimFuG0TOeOw"
+mapboxgl.accessToken = config.MAPBOX_TOKEN
 var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
 
 var main_map = new mapboxgl.Map({
@@ -106,7 +141,7 @@ var options = {
         id: 'chart1',
         type: 'bar',
         height: 260,
-        width: 280
+        width: 280,
       },
       plotOptions: {
         bar: {
@@ -114,18 +149,17 @@ var options = {
         }
       },
       dataLabels: {
-        position: 'bottom'
+        position: false
       },
       colors: [
         "#F3B415",
         ],
-
       axisBorder: {
         show: false
       },
       xaxis: {
         categories: [],
-        tickPlacement: "on",
+        show: false,
         labels: {
             show: false
         }
@@ -133,6 +167,9 @@ var options = {
       yaxis: {
         show: false
       },
+      tooltip: {
+        enabled: false
+      }
     };
 
 
@@ -140,10 +177,6 @@ var chart = new ApexCharts(document.querySelector("#viewshed_graph"), options);
 chart.render();
 
 function changeData(options) {
-    console.log("2.4 --> Update Data")
-    console.log(options.xaxis.categories)
-    console.log(options.series[0].data)
-
     ApexCharts.exec('chart1', "updateOptions", {
         xaxis: {
           categories: options.xaxis.categories
@@ -181,8 +214,6 @@ function coord2place(lng_coord, lat_coord, callback) {
             response.body.features.length
         ) {
             features = response.body.features
-            console.log("2.1 --> Features")
-            console.log(features)
 
             for (i = 0; i < features.length; i++) {
                 if (features[i].id.includes('country')) {
@@ -191,9 +222,7 @@ function coord2place(lng_coord, lat_coord, callback) {
                 }
             }
 
-            console.log("2.2 --> Country" + country)
             categ_options = options.xaxis.categories
-            console.log("2.3 --> categ_options" + categ_options)
 
             // Check if country in dict
             if (country2idx.hasOwnProperty(country)){
@@ -217,17 +246,11 @@ function coord2place(lng_coord, lat_coord, callback) {
             categories = []
             values = []
             slice_items = items.slice(0, 12)
-            console.log("ITEMS")
-            console.log(slice_items)
+
             for (i=0; i < slice_items.length; i++) {
                 categories.push(slice_items[i][0])
                 values.push(slice_items[i][1])
             }
-
-            console.log('--------')
-            console.log(categories)
-            console.log(values)
-            console.log('--------')
 
             options.series[0].data = values
             options.xaxis.categories = categories
@@ -267,18 +290,16 @@ main_map.addControl(new mapboxgl.FullscreenControl());
 main_map.addControl(new mapboxgl.NavigationControl());
 
 // Event Listener to get value from flask-app - coord twts
-var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.coord');
+var source = new EventSource(config.COORD_URL);
 source.addEventListener('message', function(e){
     obj_twt_coord = JSON.parse(e.data);
-    console.log('1--> Obj Coords')
-    console.log(obj_twt_coord)
 
     display_mk_main_map(obj_twt_coord);
     display_mk_box_map(obj_twt_coord);
 }, false);
 
 // Event Listener to get value from flask-app - general twts
-var source = new EventSource('https://consumer-coronavirus.twitter-realtime.com/topic/streaming.twitter.general');
+var source = new EventSource(config.GENERAL_URL);
 source.addEventListener('message', function(e){
     obj_twt = JSON.parse(e.data);
 
@@ -287,7 +308,7 @@ source.addEventListener('message', function(e){
 }, false);
 
 // Parameters
-var n_markers = 30
+var n_markers = config.N_MARKERS
 var opened = false;
 var currentMarkers_main = [];
 var currentMarkers_box = [];
@@ -318,17 +339,10 @@ function display_mk_main_map(marker) {
 
     marker_map["OPENED"] = false
 
-////
-    console.log("2--> place2coord start")
-
+    // Get coordinates and update options - bar graph
     coord2place(lng_coord=marker.long, lat_coord=marker.lat, function() {
-        console.log('Update Graph');
+        j=0;
     });
-    console.log("3--> place2coord end")
-    console.log("4--> Check options")
-    console.log(options)
-
-////
 
     // Append market into array
     currentMarkers_main.push(marker_map);
@@ -342,8 +356,6 @@ function display_mk_main_map(marker) {
     // Change with the results from the model
     fwrg = marker.following
     fwrs = marker.followers
-//    console.log('following ' + fwrg)
-//    console.log('followers ' + fwrs)
 
     len_fwrg = fwrg.toString().length
     len_fwrs = fwrs.toString().length
@@ -352,9 +364,6 @@ function display_mk_main_map(marker) {
     var goals_completed_fwrg= fwrg;
     var total_goals_fwrs = Math.pow(10, len_fwrs);
     var goals_completed_fwrs= fwrs;
-
-//    console.log('1fwg: ' +  total_goals_fwrg/goals_completed_fwrg)
-//    console.log('1fws: ' +  total_goals_fwrs/goals_completed_fwrs)
 
     popup.on('open', function(e) {
         var obj_popup = marker_map.getPopup()
