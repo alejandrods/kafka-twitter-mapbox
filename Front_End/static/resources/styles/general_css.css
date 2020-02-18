@@ -1,0 +1,248 @@
+body {
+    background: #242f3f
+}
+.container {
+    position: absolute;
+    width: 100%;
+    height: 96%;
+    left: 0;
+    top: 58px;
+    background: #242f3f;
+    z-index: 1;
+}
+.marker {
+    display: block;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+}
+#sidebar_graph{
+    position: absolute;
+    width: 300px;
+    background: white;
+    border-radius:6px;
+    box-shadow:0px 0px 6px 0px rgba(0,0,0,0.5);
+    right: 0;
+    bottom: 200px;
+    margin:10px;
+    z-index: 3;
+    overflow:hidden;
+    user-select:none;
+}
+#viewshed_graph {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 7px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 100;
+    display: block;
+    height: 250px;
+}
+#sidebar{
+    position: absolute;
+    width: 300px;
+    background: white;
+    border-radius:6px;
+    box-shadow:0px 0px 6px 0px rgba(0,0,0,0.5);
+    right: 0;
+    bottom:0;
+    margin:10px;
+    z-index: 4;
+    overflow:hidden;
+    user-select:none;
+}
+#viewshed {
+    display:block;
+    height:190px;
+}
+#blur_box {
+    opacity: 0.7;
+    filter: blur(5px);
+    position: absolute;
+    background-color: #eceeec;
+    right: 0px;
+    bottom: 0px;
+    width: 330px;
+    height: 218px;
+    border-radius:12px;
+    z-index: 2;
+}
+.outer
+{
+    width: 100%;
+}
+.box-text
+{
+    float:right;
+    width:80%;
+    display:inline-block;
+}
+.pop_graph_up
+{
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+}
+.pop_graph_down
+{
+    width: 40px;
+    height: 40px;
+    display:inline-block;
+}
+#boxbar{
+    background: #FFFFFF;
+    position: absolute;
+    width: 550px;
+    border-radius:6px;
+    box-shadow:0px 0px 6px 0px rgba(0,0,0,0.7);
+    left: 0;
+    bottom:0;
+    margin:10px;
+    z-index: 3;
+}
+#boxbar_anim {
+    border-radius:50px;
+    width: 50px;
+    float: left;
+    height: 50px;
+    z-index: 5;
+}
+#boxbar_txt {
+    width: 480px;
+    float: left;
+    height: 50px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 100;
+    line-height: 13px;
+}
+#loading {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    background-color: #242f3f;
+    z-index: 98;
+    text-align: center;
+}
+#anim {
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+}
+#text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 100;
+    line-height: 13px;
+    color: white;
+}
+.footer{
+    position: fixed;
+    bottom: -4px;
+    left: 0px;
+    width: 100vw;
+    color: #008080;
+    text-align: center;
+    padding: 10px 20px;
+    z-index: 99;
+}
+.geocoder {
+    position: absolute;
+    z-index: 1;
+    right: 0px;
+    margin-right: 10px;
+    top: 11px;
+}
+.mapboxgl-ctrl-geocoder {
+    min-width: 300px;
+}
+#img_github {
+    position: absolute;
+    margin-left: 15px;
+    width: 30px;
+    height: 30px;
+    top: 8px;
+}
+.footer-class {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 100;
+    min-height: 30px;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.footer-subclass{
+    color: #ff1d8e;
+}
+span {
+     cursor:pointer;
+     color:white;
+}
+#paypal{
+    position: absolute;
+    margin-left: 55px;
+    width: 60px;
+    height: 78px;
+    top: 1px;
+}
+#paypal_icon{
+    width: 58px;
+    height: 58px;
+}
+@media only screen and (max-width: 760px) {
+    #viewshed {
+        display: none;
+    }
+    #viewshed_graph {
+        display: none;
+    }
+    #blur_box{
+        display: none;
+    }
+    #geocoder{
+        display: none;
+    }
+}
+@media only screen and (max-width: 900px) {
+    #boxbar {
+        display: none;
+    }
+}
+@media only screen and (max-height: 690px) {
+    .container{
+        width: 100%;
+        height: 100%;
+    }
+    #viewshed {
+        display: none;
+    }
+    #viewshed_graph {
+        display: none;
+    }
+    #blur_box{
+        display: none;
+    }
+}
+@media only screen and (max-height: 690px) {
+    #boxbar {
+        display: none;
+    }
+}
