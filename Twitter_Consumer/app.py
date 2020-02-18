@@ -48,7 +48,7 @@ logging.info("Consumers created")
 @cross_origin()
 def health():
     result = {'Status': 'OK',
-              'Version': '0.0.4'}
+              'Version': '0.0.5'}
     return jsonify(result), 200
 
 
