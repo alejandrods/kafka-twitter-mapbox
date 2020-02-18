@@ -76,11 +76,11 @@ def _build_coord(data):
 
 # Create StreamClass
 class StdOutListener(StreamListener):
-    def on_data(self, data):
-        logging.info("Listening")
-        message = json.loads(data)
-        logging.info(f"Message: {message}")
+    logging.info("Listening")
 
+    def on_data(self, data):
+        message = json.loads(data)
+        # logging.info(f"Message: {message}")
         producer.send("queueing.twt_general",
                       value={'twt': message['text'],
                              'user': message['user']['name'],

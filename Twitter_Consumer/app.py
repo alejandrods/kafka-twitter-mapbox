@@ -3,11 +3,13 @@ import os
 import json
 import time
 import logging
+from dotenv import load_dotenv
 
 from flask import Flask, Response, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from kafka import KafkaConsumer
 
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO,
                     format='CONS - %(asctime)s :: %(levelname)s :: %(message)s')
@@ -15,7 +17,9 @@ logging.basicConfig(level=logging.INFO,
 
 logging.info("Init Flask-App...")
 app = Flask(__name__)
-CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources={r"/topic/*": {"origins": "https://coronavirus.twitter-realtime.com"}})
+
 logging.info("Flask-App Initialized")
 
 
@@ -23,6 +27,8 @@ logging.info("Flask-App Initialized")
 KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
 TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
+PORT = os.environ.get('PORT_CONSUMER')
+
 
 # Create consumers
 logging.info("Create consumers...")
@@ -39,12 +45,15 @@ logging.info("Consumers created")
 
 
 @app.route('/')
+@cross_origin()
 def health():
-    result = {'Status': 'OK'}
+    result = {'Status': 'OK',
+              'Version': '0.0.4'}
     return jsonify(result), 200
 
 
 @app.route('/topic/streaming.twitter.general')
+@cross_origin()
 def twt_general():
     """
     Function to get messages from consumer and send to index.html
@@ -57,7 +66,7 @@ def twt_general():
                 # Get value from message
                 dict_general = message.value
                 logging.info(f"Reading Consumer General: {dict_general}")
-                time.sleep(10)
+                time.sleep(6)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_general))
         except ValueError as e:
             logging.error(f"Error: {e}")
@@ -68,6 +77,7 @@ def twt_general():
 
 
 @app.route('/topic/streaming.twitter.coord')
+@cross_origin()
 def twt_coord():
     """
     Function to get messages from consumer and send to index.html
@@ -93,5 +103,4 @@ def twt_coord():
 if __name__ == '__main__':
     logging.info("Launch App")
     app.run(host='0.0.0.0',
-            debug=True,
-            port=8080)
+            port=PORT)
