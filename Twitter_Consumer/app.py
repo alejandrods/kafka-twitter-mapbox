@@ -66,7 +66,7 @@ def twt_general():
                 # Get value from message
                 dict_general = message.value
                 logging.info(f"Reading Consumer General: {dict_general}")
-                time.sleep(3)
+                time.sleep(6)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_general))
         except ValueError as e:
             logging.error(f"Error: {e}")

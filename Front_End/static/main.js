@@ -1,10 +1,3 @@
-// Main Script
-
-// Get execution
-var path = window.location.pathname;
-var page = path.split("/").pop();
-
-// Restriction for mobile screen
 if (screen.width < 1280 || screen.height < 740) {
     document.location = "mobile.html";
 }
@@ -23,12 +16,6 @@ setTimeout(function() {
     $('#loading').fadeOut('fast');
     $('.footer').fadeOut('fast');
 }, 4000);
-
-// Redirect Function
-function redirectIt(obj){
-    var goToLink = obj.getAttribute("href");
-    window.location.href=goToLink;
-}
 
 // Load animation
 var lottieAnimation = bodymovin.loadAnimation({
