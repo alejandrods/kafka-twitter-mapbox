@@ -9,14 +9,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# Get env variables
-MAPBOX_TOKEN = os.environ.get('MAPBOX_TOKEN')
-N_MARKERS = os.environ.get('N_MARKERS')
-
-data_js = {'mapbox_access_token': MAPBOX_TOKEN,
-           'n_markers': N_MARKERS}
-
-
 @app.route('/')
 @cross_origin()
 def index():
