@@ -435,3 +435,9 @@ function display_progress(content, color, value_txt){
     }});
     return progress_bar
 }
+
+setTimeout(function() {
+    if (options.xaxis.categories.length==0){
+        make_tour()
+    }
+}, 15000);
