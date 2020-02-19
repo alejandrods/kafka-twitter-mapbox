@@ -29,10 +29,6 @@ function getParameterByName(name, defaults, location) {
   return result === null ? defaults : decodeURIComponent(result[1].replace(/\+/g, ' '));
 }
 
-console.log(config.GENERAL_URL)
-console.log(config.COORD_URL)
-console.log(config.N_MARKERS)
-
 if (screen.width < 1280 || screen.height < 740) {
     document.location = "mobile.html";
 }
