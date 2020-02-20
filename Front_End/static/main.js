@@ -309,6 +309,7 @@ var opened = false;
 var currentMarkers_main = [];
 var currentMarkers_box = [];
 
+k=false;
 // Function to display marker - MainMap
 function display_mk_main_map(marker) {
 
@@ -362,11 +363,15 @@ function display_mk_main_map(marker) {
     var goals_completed_fwrs= fwrs;
 
     popup.on('open', function(e) {
+        if (k==false){
+            warning_following()
+            k = true;
+        }
         var obj_popup = marker_map.getPopup()
 
         if (obj_popup.opened==false){
-            bar_up = display_progress(content=pop_graph_up, color='#CFCF25', value_txt=fwrg)
-            bar_down = display_progress(content=pop_graph_down, color='#CF9125', value_txt=fwrs)
+            bar_up = display_progress(content=pop_graph_up, color='#CFCF25', value_start='Following', value_txt=fwrg)
+            bar_down = display_progress(content=pop_graph_down, color='#CF9125', value_start='Followers', value_txt=fwrs)
 
             bar_up.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
             bar_up.text.style.fontSize = '0.5rem';
@@ -407,14 +412,14 @@ function display_mk_box_map(marker) {
 }
 
 // Function to plot progress bar
-function display_progress(content, color, value_txt){
+function display_progress(content, color, value_start, value_txt){
     var progress_bar = new ProgressBar.Circle(content, {
         color: '#bcb',
         // This has to be the same size as the maximum width to prevent clipping
         strokeWidth: 7,
         trailWidth: 1,
         easing: 'easeInOut',
-        duration: 1200,
+        duration: 2200,
         text: {
             autoStyleContainer: true
         },
@@ -428,7 +433,7 @@ function display_progress(content, color, value_txt){
 
             var value = Math.round(circle.value() * 100);
             if (value === 0) {
-                circle.setText('');
+                circle.setText("");
             } else {
                 circle.setText(String(value_txt));
             }
@@ -438,6 +443,6 @@ function display_progress(content, color, value_txt){
 
 setTimeout(function() {
     if (options.xaxis.categories.length==0){
-        make_tour()
+        warning_connection()
     }
 }, 15000);
