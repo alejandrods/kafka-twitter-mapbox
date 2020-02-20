@@ -29,10 +29,6 @@ function getParameterByName(name, defaults, location) {
   return result === null ? defaults : decodeURIComponent(result[1].replace(/\+/g, ' '));
 }
 
-if (screen.width < 1280 || screen.height < 740) {
-    document.location = "mobile.html";
-}
-
 // Load Loading Animation
 var lottieAnimation = bodymovin.loadAnimation({
   container: document.getElementById('anim'),
@@ -41,6 +37,13 @@ var lottieAnimation = bodymovin.loadAnimation({
   loop: true,
   autoplay: true,
 })
+
+if (screen.width < 1280 || screen.height < 740) {
+//    url_redirect('mobile.html')
+    window.location.replace("mobile");
+
+//    document.location = "mobile.html";
+}
 
 // TimeOut to loading page
 setTimeout(function() {
@@ -445,4 +448,8 @@ setTimeout(function() {
     if (options.xaxis.categories.length==0){
         warning_connection()
     }
+}, 15000);
+
+setTimeout(function() {
+    warning_stop_connection()
 }, 15000);

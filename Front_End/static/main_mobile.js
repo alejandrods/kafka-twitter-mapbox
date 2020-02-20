@@ -7,8 +7,8 @@ var lottieAnimation = bodymovin.loadAnimation({
   autoplay: true,
 })
 
-// Redirect Function
-function redirectIt(obj){
-    var goToLink = obj.getAttribute("href");
-    window.location.href=goToLink;
-}
+//// Redirect Function
+//function redirectIt(obj){
+//    var goToLink = obj.getAttribute("href");
+//    window.location.href=goToLink;
+//}
