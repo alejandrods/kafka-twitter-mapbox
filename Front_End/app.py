@@ -20,7 +20,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/mobile.html')
+@app.route('/mobile')
 @cross_origin()
 def index_mobile():
     """
