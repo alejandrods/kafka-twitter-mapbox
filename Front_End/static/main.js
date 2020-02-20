@@ -452,4 +452,4 @@ setTimeout(function() {
 
 setTimeout(function() {
     warning_stop_connection()
-}, 15000);
+}, 120000);
