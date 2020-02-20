@@ -25,6 +25,9 @@ function warning_connection() {
     });
 
     tour.start();
+//    setTimeout(function() {
+//        tour.complete()
+//    }, 4000);
 }
 
 function warning_following() {
@@ -40,6 +43,41 @@ function warning_following() {
     });
     tour.addStep({
       text: '<img alt="img_github" src="../static/resources/Example_Progress.png" width=150px" height="100px">',
+      buttons: [
+        {
+          action() {
+            return this.next();
+          },
+          text: 'Close'
+        }
+      ],
+      id: 'Welcome'
+    });
+
+    tour.start();
+}
+
+function open_tweets() {
+    const tour = new Shepherd.Tour({
+      tourName: 'debug-tour',
+      useModalOverlay: true,
+      defaultStepOptions: {
+        classes: 'c-onboarding-modal',
+        scrollTo: {
+          behavior: 'smooth',
+          block: 'center'
+        },
+        scrollToHandler: this.scrollToHandler
+      },
+      disableScroll: true
+    });
+    tour.addStep({
+      title: 'Please, bear in mind',
+      text: `Click to open the tweets`,
+      attachTo: {
+        element: '.boxbar',
+        on: 'top'
+      },
       buttons: [
         {
           action() {
