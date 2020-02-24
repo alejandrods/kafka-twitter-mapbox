@@ -25,9 +25,6 @@ function warning_connection() {
     });
 
     tour.start();
-//    setTimeout(function() {
-//        tour.complete()
-//    }, 4000);
 }
 
 function warning_following() {
@@ -36,7 +33,7 @@ function warning_following() {
       useModalOverlay: true,
       defaultStepOptions: {
         classes: 'c-onboarding-modal',
-        scrollTo: true,
+        scrollTo: false,
         scrollToHandler: this.scrollToHandler
       },
       disableScroll: true
@@ -51,10 +48,13 @@ function warning_following() {
           text: 'Close'
         }
       ],
-      id: 'Welcome'
+      id: 'Followers'
     });
 
     tour.start();
+//    setTimeout(function() {
+//        tour.complete()
+//    }, 3500);
 }
 
 function open_tweets() {
@@ -98,7 +98,10 @@ function warning_stop_connection() {
       useModalOverlay: true,
       defaultStepOptions: {
         classes: 'c-onboarding-modal',
-        scrollTo: true,
+        scrollTo: {
+          behavior: 'smooth',
+          block: 'center'
+        },
         scrollToHandler: this.scrollToHandler
       },
       disableScroll: true
@@ -106,16 +109,11 @@ function warning_stop_connection() {
     tour.addStep({
       title: 'Please, bear in mind',
       text: `Sometimes, your website can stop the connection with our Kafka Server.`,
-      buttons: [
-        {
-          action() {
-            return this.next();
-          },
-          text: 'Close'
-        }
-      ],
-      id: 'Welcome'
+      id: 'Warning'
     });
 
     tour.start();
+    setTimeout(function() {
+        tour.complete()
+    }, 4000);
 }
