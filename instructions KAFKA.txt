@@ -1,0 +1,34 @@
+
+Lo primero es levantar Kafka y para ello usamos el docker-compose que hemos creado para ello. Dentro de este archivo hemos definido:
+- El zookeeper que es para el gobierno de los distintos brokers (creo)
+- El broker de Kafka como tal
+- Y la red privada que va a usar internamente en el docker compose
+
+# Run broker
+1. docker-compose -f docker-compose.kafka.yml up
+
+------------------------------------------------------------------------------------------------------------------------
+Después hemos creado una carpeta para el productor y otra para el consumidor, con sus correspondientes Dockerfile. Ahí, le indicamos que deben hacer, es decir, instalar los requirements.txt, levantar app.py, etc ...
+
+# Run App: generator y detector
+2. docker-compose up
+# Si cambias algo del código tienes que usar para que se vea reflejado:
+2. Docker-compose up --build
+
+------------------------------------------------------------------------------------------------------------------------
+Para poder ver los logs de cada topic debemos usar las siguientes lineas de comando:
+
+# It allows you to read and print the contents of a topic to the console.
+3. docker-compose -f docker-compose.kafka.yml exec broker kafka-console-consumer --bootstrap-server localhost:9092 --topic queueing.transactions --from-beginning
+ 
+# It allows you to read and print the contents of a topic LEGIT
+4. docker-compose -f docker-compose.kafka.yml exec broker kafka-console-consumer --bootstrap-server localhost:9092 --topic streaming.transactions.legit
+
+# It allows you to read and print the contents of a topic FRAUD
+5. docker-compose -f docker-compose.kafka.yml exec broker kafka-console-consumer --bootstrap-server localhost:9092 --topic streaming.transactions.fraud
+
+------------------------------------------------------------------------------------------------------------------------
+OPTIONAL
+
+####### DELETE IMAGES
+docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true
