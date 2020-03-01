@@ -29,10 +29,6 @@ function getParameterByName(name, defaults, location) {
   return result === null ? defaults : decodeURIComponent(result[1].replace(/\+/g, ' '));
 }
 
-if (screen.width < 1280 || screen.height < 740) {
-    document.location = "mobile.html";
-}
-
 // Load Loading Animation
 var lottieAnimation = bodymovin.loadAnimation({
   container: document.getElementById('anim'),
@@ -41,6 +37,13 @@ var lottieAnimation = bodymovin.loadAnimation({
   loop: true,
   autoplay: true,
 })
+
+if (screen.width < 1280 || screen.height < 740) {
+//    url_redirect('mobile.html')
+    window.location.replace("mobile");
+
+//    document.location = "mobile.html";
+}
 
 // TimeOut to loading page
 setTimeout(function() {
@@ -128,6 +131,13 @@ var geocoder = new MapboxGeocoder({
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(main_map));
 
+function hide(elements) {
+  elements = elements.length ? elements : [elements];
+  for (var index = 0; index < elements.length; index++) {
+    elements[index].style.display = 'none';
+  }
+}
+
 // Function to add and update graph-bar
 var options = {
       series: [{
@@ -168,9 +178,20 @@ var options = {
       }
     };
 
+function hide() {
+    document.getElementById("sidebar_graph").style.visibility = "hidden";
+    document.getElementById("viewshed_graph").style.visibility = "hidden";
+}
+
+function show() {
+    document.getElementById("sidebar_graph").style.visibility = "visible";
+    document.getElementById("viewshed_graph").style.visibility = "visible";
+}
 
 var chart = new ApexCharts(document.querySelector("#viewshed_graph"), options);
 chart.render();
+
+hide()
 
 function changeData(options) {
     ApexCharts.exec('chart1', "updateOptions", {
@@ -209,6 +230,7 @@ function coord2place(lng_coord, lat_coord, callback) {
             response.body.features &&
             response.body.features.length
         ) {
+            show()
             features = response.body.features
 
             for (i = 0; i < features.length; i++) {
@@ -441,8 +463,17 @@ function display_progress(content, color, value_start, value_txt){
     return progress_bar
 }
 
+//setTimeout(function() {
+//    open_tweets()
+//}, 6500);
+
 setTimeout(function() {
     if (options.xaxis.categories.length==0){
         warning_connection()
     }
 }, 15000);
+
+setTimeout(function() {
+    warning_stop_connection()
+}, 120000);
+

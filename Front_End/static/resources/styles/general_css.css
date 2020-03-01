@@ -4,9 +4,9 @@ body {
 .container {
     position: absolute;
     width: 100%;
-    height: 96%;
-    left: 0;
     top: 58px;
+    bottom: -30px;
+    width: 100%;
     background: #242f3f;
     z-index: 1;
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title> Coronovarius Real-Time </title>
+
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
 	<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
@@ -22,6 +23,13 @@
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158669386-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-158669386-1');
+	</script>
 
     <!--Tour-->
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@5.0.1/dist/js/shepherd.js"></script>
@@ -36,7 +44,11 @@
 
     <link rel="shortcut icon" href="../static/resources/favicon.ico">
 </head>
-	<body>
+	<body class="body">
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRQPSS6"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 		<div class="loading" id="loading">
 			<div class="anim" id="anim"></div>
 			<div class="text" id="text">Real-time tweets about Coronavirus</div>
