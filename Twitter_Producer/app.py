@@ -81,14 +81,17 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         message = json.loads(data)
         # logging.info(f"Message: {message}")
-        producer.send("queueing.twt_general",
-                      value={'twt': message['text'],
-                             'user': message['user']['name'],
-                             'screen_name': message['user']['screen_name']})
-        if message['place']:
-            filter_msg = _build_coord(message)
-            logging.info(f"Tweets with coord: {filter_msg}")
-            producer.send("queueing.twt_coord", value=filter_msg)
+        if 'text' in message:
+            producer.send("queueing.twt_general",
+                        value={'twt': message['text'],
+                                'user': message['user']['name'],
+                                'screen_name': message['user']['screen_name']})
+            if message['place']:
+                filter_msg = _build_coord(message)
+                logging.info(f"Tweets with coord: {filter_msg}")
+                producer.send("queueing.twt_coord", value=filter_msg)
+        else:
+            pass
         return True
 
     def on_error(self, status):
