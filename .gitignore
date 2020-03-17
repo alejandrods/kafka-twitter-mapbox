@@ -1,3 +1,6 @@
-.env
-.idea
-.DS_Store
+# Ignore credential file
+credentials.env
+
+# Ignore .idea and .DS_Store file
+*.idea
+*.DS_Store
