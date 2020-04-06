@@ -29,7 +29,6 @@ TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 PORT = os.environ.get('PORT_CONSUMER')
 
-
 # Create consumers
 logging.info("Create consumers...")
 consumer_general = KafkaConsumer(TWT_GENERAL_TOPIC,

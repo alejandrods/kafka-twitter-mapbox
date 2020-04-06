@@ -35,6 +35,8 @@ KAFKA_BROKER_URL = os.environ.get('KAFKA_BROKER_URL')
 TWT_GENERAL_TOPIC = os.environ.get('TWT_GENERAL_TOPIC')
 TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
+# print("KAFKA_BROKER_URL", KAFKA_BROKER_URL)
+
 # Producer
 logging.info("Init Producer...")
 producer = KafkaProducer(
