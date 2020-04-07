@@ -64,11 +64,11 @@ def twt_general():
             for message in consumer_general:
                 # Get value from message
                 dict_general = message.value
-                logging.info(f"Reading Consumer General: {dict_general}")
+                logging.info("Reading Consumer General: {}".format(dict_general))
                 time.sleep(6)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_general))
         except ValueError as e:
-            logging.error(f"Error: {e}")
+            logging.error("Error: {}".format(e))
 
     response = events()
     return Response(response,
@@ -88,11 +88,11 @@ def twt_coord():
             for message in consumer_coord:
                 # Get value from message
                 dict_coord = message.value
-                logging.info(f"Reading Consumer Coordinates: {dict_coord}")
+                logging.info("Reading Consumer Coordinates: {}".format(dict_coord))
                 time.sleep(1)
                 yield 'data:{0}\n\n'.format(json.dumps(dict_coord))
         except ValueError as e:
-            logging.error(f"Error: {e}")
+            logging.error("Error: {}".format(e))
 
     response = events()
     return Response(response,
