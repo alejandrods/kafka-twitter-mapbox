@@ -156,7 +156,7 @@ body {
     margin: 0 auto;
 }
 #text {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Thin", Helvetica, Arial, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-variant: normal;
@@ -164,6 +164,7 @@ body {
     line-height: 13px;
     color: white;
 }
+
 .footer{
     position: fixed;
     bottom: -4px;
@@ -222,6 +223,20 @@ span {
 #paypal_icon{
     width: 58px;
     height: 58px;
+}
+@font-face {
+  font-family: 'Helvetica Light';
+  src: url('./fonts/helveticaneue-light.woff2') format('woff2'),
+  url('./fonts/helveticaneue-light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Helvetica Thin';
+  src: url('./fonts/helveticaneue-thin.woff2') format('woff2'),
+  url('./fonts/helveticaneue-thin.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 @media only screen and (max-width: 760px) {
     #viewshed {
