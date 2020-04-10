@@ -31,6 +31,17 @@ def index_mobile():
     return render_template('mobile.html')
 
 
+@app.route('/update')
+@cross_origin()
+def index_update():
+    """
+    Function to render template
+    :return:
+    """
+
+    return render_template('update.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
             debug=True,

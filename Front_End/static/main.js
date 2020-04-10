@@ -41,9 +41,11 @@ var lottieAnimation = bodymovin.loadAnimation({
 if (screen.width < 1280 || screen.height < 740) {
 //    url_redirect('mobile.html')
     window.location.replace("mobile");
-
-//    document.location = "mobile.html";
 }
+
+// Updating
+window.location.replace("update");
+// Updating
 
 // TimeOut to loading page
 setTimeout(function() {
