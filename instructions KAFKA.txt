@@ -71,6 +71,9 @@ KUBERNETES CLUSTER FOR PRODUCER
 SUBIR IMAGENES DOCKER A REGISTRY
 ###############################################################
 
+# -> Damos permisos a gcloud para que acceda a docker
+# gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+
 # -> Para tagear una imagen de docker
 # docker tag twitterkafka_twitter_stream:latest eu.gcr.io/coronavirus-twitter-realtime/twitterkafka_twitter_stream:latest
 
