@@ -6,7 +6,7 @@ services:
   twitter_stream:
     build: ./Twitter_Producer
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "8000:8000"
 
@@ -14,7 +14,7 @@ services:
   twitter_consumer:
     build: ./Twitter_Consumer
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "8080:8080"
 
@@ -22,7 +22,7 @@ services:
   front_end:
     build: ./Front_End
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "9000:9000"
 

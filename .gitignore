@@ -1,5 +1,5 @@
 # Ignore credential file
-credentials.env
+.env
 
 # Ignore .idea and .DS_Store file
 *.idea
