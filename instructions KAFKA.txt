@@ -33,6 +33,10 @@ OPTIONAL
 ####### DELETE IMAGES
 docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true
 
+## To delete one file from the git history
+# -> git filter-branch --force --index-filter "git rm --cached --ignore-unmatch .env" --prune-empty --tag-name-filter cat -- --all
+# -> git push origin --force --all
+
 ------------------------------------------------------------------------------------------------------------------------
 GOOGLE CLOUD
 
