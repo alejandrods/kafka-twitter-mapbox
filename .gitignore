@@ -1,6 +1,4 @@
 # dotenv
-.env*
-*env*
 !.env.gen
 !.env.required
 
