@@ -1,5 +1,7 @@
-# Ignore credential file
-credentials.env
+# dotenv
+.env*
+!.env.gen
+!.env.required
 
 # Ignore .idea and .DS_Store file
 *.idea
