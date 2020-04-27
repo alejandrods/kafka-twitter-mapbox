@@ -1,4 +1,4 @@
-from Twitter_Consumer.app import app
+from src.consumer.app import app
 
 if __name__ == "__main__":
     app.run()

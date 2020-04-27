@@ -11,7 +11,7 @@ from tweepy import Stream
 from kafka import KafkaProducer
 
 logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s :: %(levelname)s :: %(message)s')
+                    format='PROD - %(asctime)s :: %(levelname)s :: %(message)s')
 
 """
 The streaming api is quite different from the REST api because the REST api 
@@ -37,14 +37,14 @@ TWT_COORD_TOPIC = os.environ.get('TWT_COORD_TOPIC')
 
 # print("KAFKA_BROKER_URL", KAFKA_BROKER_URL)
 
-# Producer
-logging.info("Init Producer...")
+# producer
+logging.info("Init producer...")
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BROKER_URL,
     # Encode all values as JSON
     value_serializer=lambda value: json.dumps(value).encode(),
 )
-logging.info("Producer initialized")
+logging.info("producer initialized")
 
 
 # Extract information

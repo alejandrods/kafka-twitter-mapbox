@@ -4,7 +4,6 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-# Get message with this word
 @app.route('/')
 def twitter_stream():
     return jsonify({'Status': 'Success'})

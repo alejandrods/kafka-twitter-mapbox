@@ -2,27 +2,27 @@ version: "3"
 
 # Services
 services:
-  # Twitter Producer
+  # producer
   twitter_stream:
-    build: ./Twitter_Producer
+    build: ./src/producer
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "8000:8000"
 
-  # Map Consumer
+  # consumer
   twitter_consumer:
-    build: ./Twitter_Consumer
+    build: ./src/consumer
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "8080:8080"
 
   # Front-End
   front_end:
-    build: ./Front_End
+    build: ./src/front_end
     env_file:
-      - ./credentials.env
+      - ./.env
     ports:
       - "9000:9000"
 

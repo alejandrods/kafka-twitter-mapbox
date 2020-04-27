@@ -43,10 +43,6 @@ if (screen.width < 1280 || screen.height < 740) {
     window.location.replace("mobile");
 }
 
-// Updating
-window.location.replace("update");
-// Updating
-
 // TimeOut to loading page
 setTimeout(function() {
     $('#loading').fadeOut('fast');
@@ -67,7 +63,7 @@ mapboxgl.accessToken = config.MAPBOX_TOKEN
 var mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
 
 var main_map = new mapboxgl.Map({
-    container: 'map',
+    container: 'container-map',
     style: 'mapbox://styles/mapbox/light-v10',
     center: [-3.702, 40.417],
     zoom: 10,
@@ -307,7 +303,7 @@ box_map.on('click', function(e) {
 
 // Add full-screen and navigation button
 main_map.addControl(new mapboxgl.FullscreenControl());
-main_map.addControl(new mapboxgl.NavigationControl());
+main_map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
 // Event Listener to get value from flask-app - coord twts
 var source = new EventSource(config.COORD_URL);

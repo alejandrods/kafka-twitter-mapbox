@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Coronovarius Real-Time </title>
+	<title>Coronovarius Real-Time</title>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
-	<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.3/lottie.js"></script>
+	<script src="https://kit.fontawesome.com/851e118827.js" crossorigin="anonymous"></script>
+	<script async src="https://static.addtoany.com/menu/page.js"></script>
+	<link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
 
 	<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
 	<link
@@ -15,7 +18,7 @@
 		href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
 		type="text/css"
 	/>
-	<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+
 	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 	<script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
@@ -31,12 +34,10 @@
 	  gtag('config', 'UA-158669386-1');
 	</script>
 
-    <!--Tour-->
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@5.0.1/dist/js/shepherd.js"></script>
     <link rel="stylesheet" href="../static/resources/styles/welcome.css"/>
     <link rel="stylesheet" href="../static/resources/styles/prism.css"/>
     <link rel="stylesheet" href="../static/resources/styles/fonts.css"/>
-
     <link rel="stylesheet" href="../static/resources/styles/general_css.css"/>
 
     <script src="../static/progressbar.js"></script>
@@ -45,55 +46,37 @@
     <link rel="shortcut icon" href="../static/resources/favicon.ico">
 </head>
 	<body class="body">
-		<!-- Google Tag Manager (noscript) -->
-		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRQPSS6"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<!-- End Google Tag Manager (noscript) -->
 		<div class="loading" id="loading">
 			<div class="anim" id="anim"></div>
 			<div class="text" id="text">Real-time tweets about Coronavirus</div>
 		</div>
+
 		<footer class='footer'>
-			<div class='footer-class' style="font-family: 'Helvetica Light'">Made with <span class='footer-subclass'>&#x2665;
-			</span> by <span class="as-yo" onclick="redirectIt(this)" href="https://github.com/alejandrods">Alejandro Diaz Santos</span></div>
+			<div class='footer-class' style="font-family: 'Helvetica Light'">
+				Made from <i class="em em-flag-au" aria-role="presentation" aria-label="Australia Flag"></i> by <a href="https://github.com/alejandrods" style="text-decoration: none; color: #008080;">Alejandro Diaz Santos</a>
+			</div>
 		</footer>
-		<div class="container">
-			<div class="map" id='map' style='position: absolute; top: 0; bottom: 0; width: 100%; height: 100%;'></div><br/><br/>
+
+		<div id="container-map"></div>
+		<div class="topnav">
+			<a id="git" href="https://github.com/alejandrods" class="fab fa-github fa-7x"></a>
+			<a href="https://alejandrods.github.io" style="font-size: 13px; padding: 18px 15px; font-family: 'Helvetica Thin', Helvetica, Arial, sans-serif;">Who I am</a>
 		</div>
+
 		<div class="sidebar" id="sidebar">
         	<div id='viewshed'></div>
     	</div>
+
         <div class="boxbar" id="boxbar">
             <div class="boxbar_anim" id="boxbar_anim"></div>
             <a class="boxbar_txt" id="boxbar_txt" style="text-decoration:none;" href="http://www.twitter.com">...Connecting...</a>
         </div>
+
 		<div class="sidebar_graph" id="sidebar_graph">
         	<div id='viewshed_graph'></div>
     	</div>
-		<a id="img_github" href="https://github.com/alejandrods" title="GitHub">
-			<img alt="img_github" src="../static/resources/GitHub_Mark.png"
-			width=38" height="38">
-		</a>
 		<div id="geocoder" class="geocoder"></div>
-		<div id="blur_box"></div>
-        <!--<div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="share">-->
-            <!--<a class="a2a_dd" href="https://www.addtoany.com/share"></a>-->
-            <!--<a class="a2a_button_reddit"></a>-->
-            <!--<a class="a2a_button_linkedin"></a>-->
-            <!--<a class="a2a_button_facebook"></a>-->
-            <!--<a class="a2a_button_twitter"></a>-->
-            <!--<a class="a2a_button_google_gmail"></a>-->
-            <!--<a class="a2a_button_telegram"></a>-->
-        <!--</div>-->
-        <script async src="https://static.addtoany.com/menu/page.js"></script>
-		<div id="paypal" class="paypal">
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-			<input type="hidden" name="cmd" value="_donations" />
-			<input type="hidden" name="business" value="L8GDNGRXA9TXS" />
-			<input type="hidden" name="currency_code" value="EUR" />
-			<input id="paypal_icon" type="image" src="../static/resources/Heart_Logo.png" border="0" name="submit" title="Donate if you like it" alt="Donate with PayPal button" />
-			</form>
-		</div>
+
 		<script src="../static/main.js"></script>
 	</body>
 </html>
