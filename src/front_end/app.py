@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_cors import CORS, cross_origin
 
 
@@ -13,7 +13,7 @@ CORS(app)
 @cross_origin()
 def index():
     """
-    Function to render template
+    Function to render main template
     :return:
     """
 
@@ -24,7 +24,7 @@ def index():
 @cross_origin()
 def index_mobile():
     """
-    Function to render template
+    Function to render mobile template
     :return:
     """
 
@@ -35,14 +35,22 @@ def index_mobile():
 @cross_origin()
 def index_update():
     """
-    Function to render template
+    Function to render update template
     :return:
     """
 
     return render_template('update.html')
 
 
+@app.route('/health_liveness')
+def health_liveness():
+    result = {'Service': 'Front',
+              'Status': 'OK',
+              'Version': '1.0.1'}
+    return jsonify(result), 200
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
             debug=True,
-            port=int(os.environ.get('PORT', 9000)))
+            port=8080)

@@ -43,14 +43,6 @@ consumer_coord = KafkaConsumer(TWT_COORD_TOPIC,
 logging.info("Consumers created")
 
 
-@app.route('/')
-@cross_origin()
-def health():
-    result = {'Status': 'OK',
-              'Version': '0.0.5'}
-    return jsonify(result), 200
-
-
 @app.route('/topic/streaming.twitter.general')
 @cross_origin()
 def twt_general():
@@ -99,7 +91,16 @@ def twt_coord():
                     mimetype="text/event-stream")
 
 
+@app.route('/health_liveness')
+@cross_origin()
+def health_liveness():
+    result = {'Service': 'Consumer',
+              'Status': 'OK',
+              'Version': '1.0.1'}
+    return jsonify(result), 200
+
+
 if __name__ == '__main__':
     logging.info("Launch App")
     app.run(host='0.0.0.0',
-            port=8080)
+            port=7000)
