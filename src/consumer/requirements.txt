@@ -3,4 +3,3 @@ tweepy
 flask
 python-dotenv
 flask-cors==3.0.7
-gunicorn
