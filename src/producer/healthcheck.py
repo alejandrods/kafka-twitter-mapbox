@@ -4,12 +4,15 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-@app.route('/')
-def twitter_stream():
-    return jsonify({'Status': 'Success'})
+@app.route('/health_liveness')
+def health_liveness():
+    result = {'Service': 'Producer',
+              'Status': 'OK',
+              'Version': '1.0.1'}
+    return jsonify(result), 200
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',
             debug=True,
-            port=int(os.environ.get('PORT', 7000)))
+            port=6000)
