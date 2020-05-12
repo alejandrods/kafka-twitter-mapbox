@@ -3,6 +3,7 @@
 *env*
 !.env.gen
 !.env.required
+instructions.txt
 
 # Ignore .idea and .DS_Store file
 *.idea
