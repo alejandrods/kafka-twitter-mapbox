@@ -28,10 +28,10 @@ of the application to deploy it in a best way in Google Cloud.
 
 [Run App](#Deploy)  
 
-[Examples](#Examples)  
+[Contribute](#Contribute)  
 
 <a name="Installation"></a>
-#### Installation
+### Installation
 
 1.- Clone the repository in your local machine:
 ```
@@ -72,7 +72,7 @@ N_MARKERS: "Max markers at the same time - (i.e 120)"
 ```
 
 <a name="Deploy"></a>
-#### Run
+### Run
 First of all, we need to start the `Kafka` server. Then, we could start the `producer`, `consumer` and
  `front-end`.
  
@@ -84,7 +84,8 @@ First of all, we need to start the `Kafka` server. Then, we could start the `pro
 
 3.- Access to `http://localhost:8080` to check the app.
 
-#### Run
+<a name="Contribute"></a>
+### Contribute
 I am constantly implementing new features to this project. For instance, I would like to implement 
 a sentimental analysis and a named entity recognition to extract relevant tokens to analyze
 these messages. Feel free to open pull request to implement new features or fix bugs.
