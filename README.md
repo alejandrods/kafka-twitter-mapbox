@@ -19,7 +19,7 @@ like to track from Twitter.
 
 You can visit the website here: https://coronavirus.twitter-realtime.com
 
-**Important:** The website is currently down for maintenance. I am trying to redefine the architecture
+> **Important:** The website is currently down for maintenance. I am trying to redefine the architecture
 of the application to deploy it in a best way in Google Cloud.
 
 ### Table of Contents  
